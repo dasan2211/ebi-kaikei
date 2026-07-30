@@ -1,0 +1,164 @@
+meta:
+  app_name: EBI Kaikei
+  description: A local-first accounting app for sole proprietors
+  brand_mark: EBI
+  brand_tagline: LOCAL LEDGER
+
+language:
+  label: Language
+  ja: 日本語
+  en: English
+
+books:
+  label: Book
+  loading: Loading books…
+  load_error_title: Could not load books
+  load_error: "Could not load books: {error}"
+  switch_error: Could not switch books
+  types:
+    business: Business income
+    miscellaneous: Miscellaneous income
+
+setup:
+  kicker: FIRST SETUP
+  title: First, choose your language
+  description: Choose the language for the interface and initial chart of accounts. Complete this step to start accounting.
+  language_legend: Language to use
+  ja_description: Account names for Japanese sole proprietors
+  en_description: English chart of accounts
+  accounts_title: "Create {count} essential accounts"
+  accounts_description: Includes inventory, equipment, depreciation expense, and other accounts needed for daily and year-end entries.
+  continue: Start in this language
+  saving: Getting things ready…
+  loading: Checking setup status…
+  load_error_title: Could not load setup
+  error: "Could not complete setup: {error}"
+  local_note: Settings and accounting data are stored only on this device.
+
+navigation:
+  aria_label: Main navigation
+  dashboard: Home
+  journal: New journal entry
+  journal_book: Journal book
+  ledger: General ledger
+  trial_balance: Trial balance
+  accounts: Chart of accounts
+  settings: Settings & backup
+  glyphs:
+    dashboard: H
+    journal: N
+    journal_book: J
+    ledger: G
+    trial_balance: T
+    accounts: A
+    settings: S
+
+sidebar:
+  local_storage: Saved on this device
+
+topbar:
+  fiscal_year: "FY {year}"
+  sample_business: Sample business
+  fiscal_period: "Fiscal period {start} — {end}"
+  help: Help
+
+common:
+  debit: Debit
+  credit: Credit
+  debit_glyph: Dr
+  credit_glyph: Cr
+  currency_unit: yen
+  not_available: "—"
+
+dashboard:
+  kicker: WORKSPACE
+  title: Today's accounting
+  subtitle: From entry to ledger, everything stays on this device.
+  start_journal: New journal entry
+  quick_start_kicker: QUICK START
+  quick_title_line_1: Turn one receipt
+  quick_title_line_2: into a journal entry.
+  quick_description: Enter the date, description, account, and amount in order. Move through every field with the Tab key.
+  open_entry: Open entry form
+  current_period_kicker: CURRENT PERIOD
+  preparing: Preparing
+  unposted_entries: Unposted entries
+  last_posted_date: Last posted date
+  balance_difference: Balance difference
+  zero_yen: 0 yen
+  phase_title: Phase 1 foundation
+  phase_description: Starting small and accurate with accounts and journal entries.
+
+accounts:
+  kicker: CHART OF ACCOUNTS
+  title: Chart of accounts
+  subtitle: Manage the account structure used throughout the books.
+  add: Add account
+  search_label: Search accounts
+  search_placeholder: Search by code or account name
+  count: "{count} accounts"
+  load_error: "Could not load accounts: {error}"
+  columns:
+    code: Code
+    name: Account name
+    type: Type
+    normal_side: Normal balance
+    status: Status
+  status:
+    active: Active
+    inactive: Inactive
+
+account_types:
+  asset: Asset
+  liability: Liability
+  equity: Equity
+  revenue: Revenue
+  expense: Expense
+
+journal:
+  kicker: NEW JOURNAL ENTRY
+  title: Journal entry
+  subtitle: Use Tab to move from the date through the lines and save action.
+  balanced: Balanced
+  difference: "Difference {amount} yen"
+  transaction_date: Transaction date
+  description: Description
+  date_placeholder: YYYY-MM-DD
+  description_placeholder: Describe the transaction
+  lines_aria_label: Journal lines
+  debit_kicker: DEBIT
+  credit_kicker: CREDIT
+  account: Account
+  select_account: Select an account
+  amount: Amount
+  memo: Line memo
+  memo_placeholder: Memo (optional)
+  add_line: "＋ Add {side} line"
+  total: "{side} total"
+  saved: "Draft saved ({id})"
+  validation_date: Enter a valid transaction date
+  validation_balance: Enter a balanced journal entry of at least 1 yen
+  validation_account: Select an account for every line
+  draft_hint: Posted entries cannot be edited directly. Save this entry as a draft first.
+  clear: Clear entry
+  saving: Saving…
+  save_draft: Save draft
+  save_shortcut: Ctrl S
+
+coming_soon:
+  journal_book:
+    title: Journal book
+    kicker: JOURNAL BOOK
+  ledger:
+    title: General ledger
+    kicker: GENERAL LEDGER
+  trial_balance:
+    title: Trial balance
+    kicker: TRIAL BALANCE
+  settings:
+    title: Settings & backup
+    kicker: SETTINGS & BACKUP
+  subtitle: This Phase 2 screen will be calculated dynamically from journal lines.
+  symbol: L
+  empty_title: Building the accounting core first
+  empty_description: Search, date filtering, and pagination will be built on accurate journal data.

@@ -1,0 +1,164 @@
+meta:
+  app_name: EBI Kaikei
+  description: 個人事業主向けローカルファースト会計アプリ
+  brand_mark: EBI
+  brand_tagline: LOCAL LEDGER
+
+language:
+  label: 言語
+  ja: 日本語
+  en: English
+
+books:
+  label: 帳簿
+  loading: 帳簿を読み込んでいます…
+  load_error_title: 帳簿を読み込めませんでした
+  load_error: "帳簿を読み込めませんでした: {error}"
+  switch_error: 帳簿を切り替えられませんでした
+  types:
+    business: 事業所得
+    miscellaneous: 雑所得
+
+setup:
+  kicker: FIRST SETUP
+  title: はじめに、言語を選択
+  description: 画面表示と初期勘定科目に使う言語を選んでください。この設定を完了すると会計を始められます。
+  language_legend: 使用する言語
+  ja_description: 日本の個人事業向け科目名
+  en_description: English chart of accounts
+  accounts_title: "基本の勘定科目を{count}件作成"
+  accounts_description: 棚卸資産、備品、減価償却費など、日常入力と期末整理に必要な科目を含みます。
+  continue: この言語で始める
+  saving: 準備しています…
+  loading: セットアップ状態を確認しています…
+  load_error_title: セットアップを読み込めませんでした
+  error: "セットアップを完了できませんでした: {error}"
+  local_note: 設定と会計データは、この端末内だけに保存されます。
+
+navigation:
+  aria_label: 主要メニュー
+  dashboard: ホーム
+  journal: 仕訳を入力
+  journal_book: 仕訳帳
+  ledger: 総勘定元帳
+  trial_balance: 試算表
+  accounts: 勘定科目
+  settings: 設定・バックアップ
+  glyphs:
+    dashboard: 今
+    journal: 入
+    journal_book: 仕
+    ledger: 元
+    trial_balance: 試
+    accounts: 科
+    settings: 設
+
+sidebar:
+  local_storage: 端末内に保存
+
+topbar:
+  fiscal_year: "{year}年度"
+  sample_business: サンプル事業所
+  fiscal_period: "会計期間 {start} — {end}"
+  help: ヘルプ
+
+common:
+  debit: 借方
+  credit: 貸方
+  debit_glyph: 借
+  credit_glyph: 貸
+  currency_unit: 円
+  not_available: "—"
+
+dashboard:
+  kicker: WORKSPACE
+  title: 今日の会計
+  subtitle: 入力から帳簿まで、すべてこの端末の中で完結します。
+  start_journal: 仕訳を入力
+  quick_start_kicker: QUICK START
+  quick_title_line_1: 領収書を一枚、
+  quick_title_line_2: 仕訳に起こす。
+  quick_description: 日付、摘要、勘定科目、金額の順に入力できます。Tabキーだけで次の項目へ進めます。
+  open_entry: 入力画面を開く
+  current_period_kicker: CURRENT PERIOD
+  preparing: 準備中
+  unposted_entries: 未確定の仕訳
+  last_posted_date: 最終確定日
+  balance_difference: 貸借差額
+  zero_yen: 0円
+  phase_title: Phase 1 基盤
+  phase_description: 勘定科目と仕訳入力から、小さく正確に始めます。
+
+accounts:
+  kicker: CHART OF ACCOUNTS
+  title: 勘定科目
+  subtitle: 帳簿全体で使用する科目体系を管理します。
+  add: 科目を追加
+  search_label: 勘定科目を検索
+  search_placeholder: コード・科目名で検索
+  count: "{count} 科目"
+  load_error: "勘定科目を読み込めませんでした: {error}"
+  columns:
+    code: コード
+    name: 勘定科目名
+    type: 区分
+    normal_side: 通常残高
+    status: 状態
+  status:
+    active: 使用中
+    inactive: 停止
+
+account_types:
+  asset: 資産
+  liability: 負債
+  equity: 純資産
+  revenue: 収益
+  expense: 費用
+
+journal:
+  kicker: NEW JOURNAL ENTRY
+  title: 仕訳入力
+  subtitle: Tabキーで日付から明細、保存まで順に移動できます。
+  balanced: 貸借一致
+  difference: "差額 {amount}円"
+  transaction_date: 取引日
+  description: 摘要
+  date_placeholder: YYYY-MM-DD
+  description_placeholder: 取引の内容を入力
+  lines_aria_label: 仕訳明細
+  debit_kicker: DEBIT
+  credit_kicker: CREDIT
+  account: 勘定科目
+  select_account: 勘定科目を選択
+  amount: 金額
+  memo: 明細メモ
+  memo_placeholder: メモ（任意）
+  add_line: "＋ {side}明細を追加"
+  total: "{side}合計"
+  saved: "下書きを保存しました（{id}）"
+  validation_date: 取引日を正しく入力してください
+  validation_balance: 貸借が一致する1円以上の仕訳を入力してください
+  validation_account: すべての明細で勘定科目を選択してください
+  draft_hint: 確定後の仕訳は直接変更できません。まず下書きとして保存します。
+  clear: 入力をクリア
+  saving: 保存中…
+  save_draft: 下書きを保存
+  save_shortcut: Ctrl S
+
+coming_soon:
+  journal_book:
+    title: 仕訳帳
+    kicker: JOURNAL BOOK
+  ledger:
+    title: 総勘定元帳
+    kicker: GENERAL LEDGER
+  trial_balance:
+    title: 試算表
+    kicker: TRIAL BALANCE
+  settings:
+    title: 設定・バックアップ
+    kicker: SETTINGS & BACKUP
+  subtitle: Phase 2以降で、仕訳明細から動的に算出する画面です。
+  symbol: 帳
+  empty_title: 会計コアを先に整えています
+  empty_description: 正確な仕訳データを土台に、検索・期間指定・ページングを備えて実装します。

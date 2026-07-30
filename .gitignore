@@ -1,0 +1,12 @@
+node_modules/
+dist/
+coverage/
+*.log
+.idea/
+.vscode/
+src-tauri/target/
+src-tauri/gen/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
