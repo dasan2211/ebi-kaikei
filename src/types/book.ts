@@ -1,8 +1,9 @@
-export type IncomeType = "business" | "miscellaneous";
+export type ConsumptionTaxStatus = "taxable" | "exempt";
 
 export type Book = {
   id: string;
-  incomeType: IncomeType;
+  name: string;
+  consumptionTaxStatus: ConsumptionTaxStatus;
 };
 
 export type BookState = {

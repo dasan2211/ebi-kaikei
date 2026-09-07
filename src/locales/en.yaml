@@ -42,6 +42,8 @@ navigation:
   journal_book: Journal book
   ledger: General ledger
   trial_balance: Trial balance
+  closing: Closing & tax
+  attachments: Documents
   accounts: Chart of accounts
   settings: Settings & backup
   glyphs:
@@ -50,17 +52,49 @@ navigation:
     journal_book: J
     ledger: G
     trial_balance: T
+    closing: C
+    attachments: D
     accounts: A
     settings: S
 
 sidebar:
-  local_storage: Saved on this device
+  open_local_settings: Open settings and backup
+  context_aria_label: Book context
+  book: Book
+  fiscal_year: Fiscal year
+  current_fiscal_year: Current
+  switch_book: Switch book
+  previous_year: Previous fiscal year
+  next_year: Next fiscal year
 
 topbar:
   fiscal_year: "FY {year}"
   sample_business: Sample business
   fiscal_period: "Fiscal period {start} — {end}"
   help: Help
+
+help:
+  kicker: QUICK GUIDE
+  title: Using EBI Kaikei
+  introduction: Complete daily entries, review your books, and create backups entirely on this device.
+  navigation:
+    title: Move between screens
+    description: Use the left menu to open the journal book, general ledger, trial balance, and other screens. Switch the book and fiscal year at the upper left.
+  journal:
+    title: Enter a journal entry
+    description: Choose simple or compound entry, then enter the transaction date, description, accounts, and amounts. Confirm that debits and credits balance before posting.
+  backup:
+    title: Protect your data
+    description: Create a consistent backup from Settings & backup and restore it when needed.
+  shortcuts:
+    title: Keyboard controls
+    next: Move to the next field
+    previous: Return to the previous field
+    close: Close this help guide
+    date: Enter an accounting date directly
+  actions:
+    settings: Open settings & backup
+    journal: Open journal entry
 
 common:
   debit: Debit
@@ -69,6 +103,13 @@ common:
   credit_glyph: Cr
   currency_unit: yen
   not_available: "—"
+  loading: Loading…
+  reload: Reload
+  processing: Processing…
+  actions: Actions
+  delete: Delete
+  cancel: Cancel
+  close: Close
 
 dashboard:
   kicker: WORKSPACE
@@ -81,13 +122,14 @@ dashboard:
   quick_description: Enter the date, description, account, and amount in order. Move through every field with the Tab key.
   open_entry: Open entry form
   current_period_kicker: CURRENT PERIOD
-  preparing: Preparing
+  summary_ready: Updated
+  summary_error: Unavailable
+  summary_load_error: "Could not load the period summary: {error}"
   unposted_entries: Unposted entries
   last_posted_date: Last posted date
   balance_difference: Balance difference
-  zero_yen: 0 yen
-  phase_title: Phase 1 foundation
-  phase_description: Starting small and accurate with accounts and journal entries.
+  entries_count: "{count}"
+  balance_amount: "{amount} yen"
 
 accounts:
   kicker: CHART OF ACCOUNTS
@@ -116,6 +158,106 @@ account_types:
   expense: Expense
 
 journal:
+  editor_aria_label: Journal entry form
+  mode_label: Entry method
+  modes:
+    simple: Simple entry
+    simple_description: Choose a common transaction to generate the entry
+    template: Template entry
+    template_description: Fill the form from a saved recurring entry
+    compound: Compound entry
+    compound_description: Enter each debit and credit line
+  template:
+    title: Journal templates
+    description: Choose a saved template to fill descriptions and memos from the transaction month.
+    list_label: Saved journal templates
+    empty: No templates yet. Fill the form and journal lines below to create one.
+    name: Template name
+    name_placeholder: "Example: Monthly lesson fee"
+    description_template: Description template
+    description_placeholder: "Example: Lesson fee for {MM-1}"
+    available_tokens: Available variables
+    save_help: "Transaction date: {YYYY} {YY} {M} {MM} {MM-1} {MM+1} {DD} / Applied time: {hh} {mm} {ss}"
+    save: Save current entry as template
+    processing: Processing…
+    preview: "For transaction date: {value}"
+    applied: "Applied “{name}” to the entry."
+    saved: "Journal template saved ({id})."
+    validation_name: Enter a template name
+    delete: "Delete template “{name}”"
+    delete_confirm: "Delete template “{name}”?"
+    deleted: Journal template deleted.
+  simple:
+    aria_label: Simple journal entry
+    auto_balanced: Balanced automatically
+    kind_kicker: CHOOSE TRANSACTION
+    kind_title: What happened?
+    kinds:
+      expense:
+        glyph: E
+        title: Paid an expense or card bill
+        description: Record expenses, card purchases, and card withdrawals
+      sale:
+        glyph: S
+        title: Made a sale
+        description: Record cash, bank, or credit sales
+      settlement:
+        glyph: R
+        title: Created or settled a balance
+        description: Record receivables, payables, lending, borrowing, or card withdrawals
+    preview_kicker: GENERATED ENTRY
+    preview_title: Journal entry to create
+    validation_amount: Enter an amount of at least 1 yen
+    hint: Choose the transaction and details to save a normal double-entry journal entry.
+    expense:
+      action: Payment type
+      expense_payment: Paid an expense
+      expense_payment_description: Paid an expense by cash, bank, or card
+      card_payment: Credit card bill was withdrawn
+      card_payment_description: Pay other payable from a bank account
+      card_withdrawal_account: Account charged for the card bill
+      expense_account: What was it for (expense)
+      select_expense: Select an expense account
+      payment_account: How was it paid (payment source)
+      select_payment: Select cash, bank, or card
+      credit_card_suffix: " (credit card, etc.)"
+      preview_note: Debits the expense and credits the payment source. Card payments are recorded as other payable.
+      validation_accounts: Select an expense account and payment source
+      validation_card_payment: Select the account charged for the card bill
+    sale:
+      revenue_account: What was sold (revenue)
+      select_revenue: Select a revenue account
+      receipt_account: How was it received
+      select_receipt: Select cash, bank, or accounts receivable
+      preview_note: Debits where the sale was received and credits revenue. Select accounts receivable when payment is due later.
+      validation_accounts: Select a revenue account and receipt method
+    settlement:
+      type: Lending or borrowing activity
+      receivable_collection: Collected a receivable
+      receivable_collection_description: Received accounts or loans receivable
+      payable_payment: Paid a liability
+      payable_payment_description: Paid accounts payable, other payable, or a loan
+      loan_disbursement: Lent money
+      loan_disbursement_description: Paid out cash or bank funds as a loan
+      borrowing_receipt: Borrowed money
+      borrowing_receipt_description: Received borrowed funds in cash or bank
+      card_payment: Credit card bill was withdrawn
+      card_payment_description: Paid other payable from a bank account
+      deposit_account: Deposit account
+      payment_account: Payment account
+      select_cash: Select cash or bank
+      cash_account: Cash or bank
+      balance_account: Receivable or liability account
+      select_balance_account: Select accounts receivable, loans, payables, or other payable
+      card_account: Other payable (credit card, etc.)
+      receivable_note: Debits cash or bank and credits the selected receivable. Revenue is not recorded a second time.
+      payable_note: Debits the selected liability and credits cash or bank. Expenses are not recorded a second time.
+      lending_note: Debits the selected receivable and credits cash or bank to record lending.
+      borrowing_note: Debits cash or bank and credits the selected liability to record borrowing.
+      card_payment_note: Debits other payable and credits the charged bank account. The expense is not recorded a second time.
+      validation_account: Select cash or bank and the receivable or liability account
+  validation_description: Enter a description
+  remove_line: "Remove {side} line {number}"
   kicker: NEW JOURNAL ENTRY
   title: Journal entry
   subtitle: Use Tab to move from the date through the lines and save action.
@@ -133,17 +275,384 @@ journal:
   amount: Amount
   memo: Line memo
   memo_placeholder: Memo (optional)
+  tax_code: Tax code
+  no_tax_code: No tax code
   add_line: "＋ Add {side} line"
   total: "{side} total"
-  saved: "Draft saved ({id})"
+  saved: "Draft saved ({id}). You can post it with “Post this draft” without saving it again."
+  posted: "Journal entry saved and posted ({id}). It is now reflected in the journal book and ledgers."
   validation_date: Enter a valid transaction date
   validation_balance: Enter a balanced journal entry of at least 1 yen
   validation_account: Select an account for every line
   draft_hint: Posted entries cannot be edited directly. Save this entry as a draft first.
   clear: Clear entry
-  saving: Saving…
+  new_entry: Enter next journal entry
+  saving_draft: Saving draft…
+  saving_before_post: Saving draft…
+  posting: Posting entry…
+  saving_draft_status: Saving this entry as a draft. Please wait until it finishes.
+  saving_before_post_status: First saving this entry as a draft. It will be posted next.
+  posting_status: The draft has been saved. The journal entry is now being posted.
   save_draft: Save draft
-  save_shortcut: Ctrl S
+  save_and_post: Save & post
+  draft_saved: Draft saved
+  post_saved_draft: Post this draft
+  posted_button: Posted
+  save_shortcut: Ctrl+S / Ctrl+Enter
+
+reports:
+  export:
+    button: Save CSV
+    exporting: Creating CSV…
+    success: "Saved to Downloads: {fileName} ({count} rows)"
+    error: "Could not save CSV: {error}"
+  loading: Loading report…
+  filters:
+    search: Search
+    search_placeholder: Description, account, or memo
+    start_date: Start date
+    end_date: End date
+    status: Status
+  status:
+    all: All
+    draft: Draft
+    posted: Posted
+    reversed: Reversed
+  pagination:
+    aria_label: Pagination
+    range: "{first}–{last} of {total}"
+    previous: Previous
+    next: Next
+
+journal_book:
+  kicker: JOURNAL BOOK
+  title: Journal book
+  subtitle: Review entries by transaction date, with compound entries kept together.
+  count: "{count} entries"
+  load_error: "Could not load the journal book: {error}"
+  empty: No journal entries match these filters.
+  actions:
+    edit: Edit
+    delete: Delete
+    unavailable: Only posted entries can be corrected
+  edit:
+    kicker: CORRECTION ENTRY
+    title: Correct journal entry
+    notice: The original posted entry stays unchanged. A reversal and corrected entry will be recorded.
+    date: Transaction date
+    description: Description
+    lines: Journal lines
+    account: "Account for line {line}"
+    select_account: Select an account
+    side: "Side for line {line}"
+    amount: "Amount for line {line}"
+    memo: "Memo for line {line}"
+    remove_line: "Remove line {line}"
+    add_line: Add line
+    difference: "Difference {amount} yen"
+    validation: Enter a date, description, account, and an amount of at least one yen.
+    unbalanced: "Debits and credits do not match (difference: {amount} yen)."
+    save: Post correction
+    saving: Correcting…
+    success: The reversal and corrected entry were recorded.
+  delete:
+    title: Delete this journal entry?
+    description: "This will reverse “{description}”."
+    notice: The data is not physically deleted. A reversal with the debit and credit sides swapped will be recorded.
+    confirm: Post reversal
+    deleting: Reversing…
+    success: The reversal was recorded.
+  reversal_warning:
+    title: A reversal cannot be reversed
+    description: "“{description}” was created to offset the original journal entry."
+    notice: This action is unavailable because reversing a reversal would make the audit trail unclear. Review the original entry and its reversal instead.
+  columns:
+    date: Transaction date
+    description: Description
+    status: Status
+    actions: Actions
+
+general_ledger:
+  kicker: GENERAL LEDGER
+  title: General ledger
+  subtitle: Select an account to review its movements and running balance by transaction date.
+  account: Account
+  opening_balance: Opening balance
+  total_debit: Total debit
+  total_credit: Total credit
+  closing_balance: Closing balance
+  count: "{count} lines"
+  load_error: "Could not load the general ledger: {error}"
+  empty: No ledger lines match these filters.
+  columns:
+    date: Transaction date
+    description: Description and line memo
+    balance: Balance
+    status: Status
+
+trial_balance:
+  kicker: TRIAL BALANCE
+  title: Trial balance
+  subtitle: Review opening balances, period movements, and closing balances by account.
+  calculating: Calculating
+  balanced: Balanced
+  difference: "Difference {amount} yen"
+  count: "{count} accounts"
+  load_error: "Could not load the trial balance: {error}"
+  empty: No balances or movements match these filters.
+  total: Total
+  columns:
+    code: Code
+    account: Account
+    type: Type
+    opening: Opening balance
+    period: Period total
+    closing: Closing balance
+
+settings:
+  kicker: SETTINGS & LOCAL DATA
+  title: Settings & backup
+  subtitle: Manage accounting data and application settings stored on this device.
+  books:
+    kicker: BOOKS
+    title: Books
+    description: Create as many books as you need. Journal entries and reports stay separate for each book.
+    list_label: Existing books
+    current: Current
+    name: New book name
+    name_help: "Examples: Main business, Online shop, Rental property"
+    create: Create book
+    creating: Creating…
+    created: "Created and switched to “{name}”."
+    error: "Could not create book: {error}"
+    delete: Delete
+    delete_label: "Delete book “{name}”"
+    delete_title: Delete this book?
+    delete_description: "Delete “{name}”. This action cannot be undone."
+    delete_empty_only: Books containing journal entries, fixed assets, inventory, documents, or templates cannot be deleted.
+    confirm_name: "Enter the book name “{name}” to confirm"
+    confirm_delete: Delete book
+    deleting: Deleting…
+    deleted: "Deleted “{name}”."
+    delete_error: "Could not delete book: {error}"
+    last_book: The last book cannot be deleted
+  journal_deletion:
+    kicker: JOURNAL CLEANUP
+    title: Delete journal contents
+    description: "Delete journal entries from “{name}” by period while keeping the book and its accounts."
+    current_month: Delete this month's entries
+    fiscal_year: "Delete {year} fiscal-year entries"
+    all: Delete all journal entries
+    note: This removes draft, posted, and reversed entries in the selected period together with linked documents, depreciation records, and inventory adjustments.
+    dialog_title: Delete journal entries in bulk?
+    dialog_description: "Delete the “{scope}” selection from “{name}”."
+    warning: This action cannot be undone. Create a manual snapshot first if needed. Deletion is stopped for safety when a correction entry is linked across the selected period boundary.
+    confirm_name: "Enter the book name “{name}” to confirm"
+    confirm_delete: Delete journal entries
+    deleting: Deleting…
+    deleted: "Deleted {entries} journal entries and {attachments} documents."
+    deleted_with_file_warning: "Deleted {entries} journal entries and {attachments} documents, but {failedFiles} document files could not be cleaned up."
+    error: "Could not delete journal entries: {error}"
+  appearance:
+    kicker: APPEARANCE
+    title: Appearance
+    description: Choose the language, theme, and Japanese font family used throughout the application.
+    language_help: Your selected language is applied immediately and restored the next time the app starts.
+    theme: Theme
+    theme_help: Follow the system setting or always use the dark or light theme.
+    theme_system: System
+    theme_dark: Dark
+    theme_light: Light
+    font_family: Font family
+    help: Your selection is applied immediately and restored the next time the app starts.
+    gothic: Gothic (sans-serif)
+    mincho: Mincho (serif)
+  consumption_tax:
+    kicker: CONSUMPTION TAX
+    title: Consumption tax settings
+    description: Set the consumption tax business status for the current book.
+    business_status: Business status
+    input_behavior: When tax-exempt is selected, tax code fields are hidden from journal entry.
+    taxable: Taxable business
+    exempt: Tax-exempt business
+    saved: Consumption tax settings were saved.
+    error: "Could not save consumption tax settings: {error}"
+  database:
+    kicker: LOCAL SQLITE
+    title: Database file
+    description: The SQLite file containing EBI Kaikei settings, accounts, and journal entries.
+    loading: Checking database information…
+    error: "Could not read database information: {error}"
+    file_name: File name
+    size: File size
+    path: Location
+    reveal: Show in folder
+    opening: Opening…
+    revealed: The database file was shown in the file manager.
+    warning_title: Do not edit this file directly
+    warning: Editing, moving, or replacing the file while the app is running may corrupt accounting data.
+
+  backup:
+    kicker: SAFE BACKUP
+    title: Backup and restore
+    description: Create a consistent snapshot of the live database with the SQLite Online Backup API.
+    loading_automatic: Loading automatic backup settings…
+    automatic_title: Automatic backups
+    automatic_description: Run backups only while the app is open and delete the oldest automatic backups beyond the retention limit.
+    automatic_enabled: Enable automatic backups
+    enabled: Enabled
+    disabled: Disabled
+    interval: Interval
+    interval_15: Every 15 minutes
+    interval_30: Every 30 minutes
+    interval_60: Every hour
+    interval_180: Every 3 hours
+    interval_360: Every 6 hours
+    interval_720: Every 12 hours
+    interval_1440: Every day
+    retention_count: Automatic backups to keep
+    retention_option: "{count} backups"
+    destination: Backup destination
+    choose_destination: Choose folder
+    save_automatic: Save automatic backup settings
+    saving_automatic: Saving…
+    automatic_saved: Automatic backup settings saved.
+    last_success: "Last successful backup: {date}"
+    never_run: No automatic backup has run yet.
+    last_error: "Last error: {error}"
+    automatic_history: Automatic backup history
+    automatic_history_description: Only old automatic backups beyond the retention limit are deleted automatically.
+    automatic_list_label: Saved automatic backups
+    automatic_empty: No automatic backups have been created yet.
+    snapshot_title: Manual snapshots
+    snapshot_description: Save a point in time manually. Automatic retention never deletes these snapshots.
+    create: Create snapshot
+    creating: Creating…
+    created: "Snapshot created: {fileName}"
+    error: "Backup operation failed: {error}"
+    snapshot_list_label: Saved manual snapshots
+    empty: No manual snapshots have been created yet.
+    restore: Restore this backup
+    restoring: Restoring…
+    confirm_restore: "Restore {fileName}? The current state will be backed up automatically first."
+    restored: "Restored {fileName}. The previous state was saved as {safetyBackup}."
+  import:
+    kicker: CSV IMPORT
+    title: Journal CSV import
+    description: Validate an EBI Kaikei journal CSV and import it into the current book.
+    file: CSV file
+    previewing: Validating CSV…
+    too_large: CSV files must be 50 MB or smaller.
+    error: "Could not read CSV: {error}"
+    preview_label: Import preview
+    entries: Entries
+    lines: Lines
+    draft_title: Import as drafts
+    draft_description: Every entry is validated first, then saved as drafts in one transaction. Duplicate entry IDs are rejected.
+    import: Import drafts
+    importing: Importing…
+    imported: "Imported {entries} entries ({lines} lines)."
+
+closing:
+  kicker: YEAR-END OPERATIONS
+  title: Closing & tax
+  subtitle: "Review and process balance reconciliation, consumption tax, fixed assets, and inventory for FY {year}."
+  reconciliation:
+    kicker: ACTUAL BALANCE
+    title: Actual balance reconciliation
+    description: Select only the account you want to check, such as cash, and compare its posted ledger balance with the actual balance.
+    account: Account to reconcile
+    date: Reconciliation date
+    actual_balance: Actual balance
+    verify: Compare balances
+    ledger_balance: Ledger balance
+    difference: Difference (actual − ledger)
+    matched: The ledger and actual balances match.
+    mismatched: There is a difference. If its cause is unknown, select an offset account and post an adjustment.
+    adjustment_account: Offset account
+    memo: Difference memo (optional)
+    memo_placeholder: e.g. unexplained cash shortage
+    adjust: Post the difference
+    adjusted: Posted an adjustment and matched the ledger to the actual balance.
+    note: The ledger balance includes only posted entries through the reconciliation date. Reclassify cash over and short once the cause is identified.
+  tax:
+    kicker: CONSUMPTION TAX
+    title: Consumption tax summary
+    output_tax: Tax included in sales
+    input_tax: Tax included in purchases
+    difference: Net tax
+    code: Code
+    name: Tax code
+    rate: Rate
+    gross: Gross
+    net: Net
+    tax: Tax
+    empty: There are no posted entries with a tax code.
+    note: Effective-dated tax codes provide a reference calculation from tax-inclusive posted amounts. Confirm all applicable filing rules before submission.
+  assets:
+    kicker: FIXED ASSETS
+    title: Fixed assets & depreciation
+    name: Asset name
+    account: Asset account
+    acquisition_date: Acquisition date
+    cost: Acquisition cost
+    residual: Residual value
+    life: Useful life (years)
+    add: Add fixed asset
+    accumulated: Accumulated depreciation
+    book_value: Book value
+    post_depreciation: "Post FY {year} depreciation"
+    created: Fixed asset added.
+    posted: "Posted a depreciation entry for {amount} yen."
+    empty: No fixed assets have been added.
+  inventory:
+    kicker: INVENTORY & COGS
+    title: Inventory & cost of goods sold
+    year: Fiscal year
+    count_date: Count date
+    beginning: Beginning inventory
+    ending: Ending inventory
+    cogs: Cost of goods sold
+    post: Post inventory adjustment
+    posted: "Posted the inventory adjustment. Cost of goods sold is {amount} yen."
+    empty: No inventory adjustment has been posted.
+    note: Uses the periodic method to transfer beginning inventory to Purchases and ending inventory to Inventory in one posted journal entry.
+
+attachments:
+  kicker: SOURCE DOCUMENTS
+  title: Documents & attachments
+  subtitle: Link receipt or invoice files, or an external storage URL, to journal entries.
+  upload_title: Add a document
+  formats: Store a file on this device or register a document URL from an external service.
+  source_type: Document storage method
+  file_source: Attach a file
+  url_source: Register storage URL
+  journal_entry: Journal entry
+  select_entry: Select an entry
+  file: File
+  upload: Add document
+  too_large: Files must be 20 MB or smaller.
+  uploaded: Document added.
+  url_title: Document name
+  url_title_placeholder: e.g. August 2026 cloud service receipt
+  url: URL where the document can be viewed
+  add_url: Register URL
+  url_added: Document URL registered.
+  url_validation: Enter a document name, an HTTPS URL, and confirm the retention conditions.
+  legal_notice_title: About URL-based retention
+  legal_notice: When retaining only a URL, the document must remain accessible throughout the statutory retention period and the external service must satisfy authenticity and search requirements. Do not use expiring links, pages lost when an account closes, or simple landing pages; save the file before access expires.
+  retention_confirmation: I confirmed long-term access and the external service's retention requirements
+  no_entries: "There are no journal entries to link in FY {year}. Create an entry first."
+  list_title: Saved documents
+  storage_note: Attached files are stored in the application data folder; external documents store only their URL.
+  size: Size
+  added_at: Added
+  show_file: Show in folder
+  open_url: Open URL
+  external_url: External URL
+  confirm_delete: "Delete {name}? This cannot be undone."
+  deleted: Document deleted.
+  empty: No documents have been added.
 
 coming_soon:
   journal_book:
