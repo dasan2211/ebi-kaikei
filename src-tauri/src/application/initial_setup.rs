@@ -373,6 +373,23 @@ pub fn complete(connection: &mut Connection, locale: &str) -> AppResult<SetupSta
             )?;
         }
     }
+    let default_book_names = if locale == "en" {
+        [
+            (BUSINESS_BOOK_ID, "Business income"),
+            (MISCELLANEOUS_BOOK_ID, "Miscellaneous income"),
+        ]
+    } else {
+        [
+            (BUSINESS_BOOK_ID, "事業所得"),
+            (MISCELLANEOUS_BOOK_ID, "雑所得"),
+        ]
+    };
+    for (book_id, name) in default_book_names {
+        transaction.execute(
+            "UPDATE books SET name = ?1, updated_at = CURRENT_TIMESTAMP WHERE id = ?2",
+            params![name, book_id],
+        )?;
+    }
     transaction.execute(
         "INSERT INTO app_settings (key, value, updated_at)
          VALUES (?1, ?2, CURRENT_TIMESTAMP)
