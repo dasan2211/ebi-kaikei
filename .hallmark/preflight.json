@@ -1,0 +1,9 @@
+{
+  "date": "2026-08-25",
+  "framework": "React 19 + Vite 8 + Tauri 2",
+  "font_stack": "Japanese system Gothic/Mincho selected by user preference",
+  "palette": "warm paper, deep green ink, coral signal accent, light and dark modes",
+  "motion": "CSS-only, motion-cut with reduced-motion support",
+  "spacing": "legacy ad-hoc spacing; Hallmark 4pt semantic scale introduced",
+  "preserve": ["local-first product identity", "Japanese typography", "light/dark modes", "desktop accounting information architecture"]
+}
