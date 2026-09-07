@@ -50,7 +50,7 @@ fn migration_creates_strict_accounting_tables_without_choosing_a_language() {
     assert_eq!(taxable_book_count, 2);
     assert_eq!(book_id_is_required, 1);
     assert!(!setup_status.completed);
-    assert_eq!(setup_status.default_account_count, 34);
+    assert_eq!(setup_status.default_account_count, 36);
 }
 
 #[test]
@@ -60,7 +60,7 @@ fn japanese_setup_creates_year_end_accounts_in_one_transaction() {
     let mut connection = open_database(&path).expect("DBを初期化");
 
     let status = initial_setup::complete(&mut connection, "ja").expect("日本語でセットアップ");
-    let names: Vec<String> = ["1300", "1500", "1590", "6130"]
+    let names: Vec<String> = ["1250", "1300", "1500", "1590", "6130"]
         .into_iter()
         .map(|code| {
             connection
@@ -73,14 +73,28 @@ fn japanese_setup_creates_year_end_accounts_in_one_transaction() {
     let book_account_count: i64 = connection
         .query_row("SELECT COUNT(*) FROM book_accounts", [], |row| row.get(0))
         .expect("帳簿別勘定科目数を取得");
+    let cash_over_short: String = connection
+        .query_row(
+            "SELECT name FROM accounts WHERE id = 'account-cash-over-short'",
+            [],
+            |row| row.get(0),
+        )
+        .expect("現金過不足科目を取得");
 
     assert!(status.completed);
     assert_eq!(status.locale.as_deref(), Some("ja"));
     assert_eq!(
         names,
-        ["棚卸資産", "備品", "減価償却累計額（備品）", "減価償却費"]
+        [
+            "貸付金",
+            "棚卸資産",
+            "備品",
+            "減価償却累計額（備品）",
+            "減価償却費"
+        ]
     );
-    assert_eq!(book_account_count, 68);
+    assert_eq!(cash_over_short, "現金過不足");
+    assert_eq!(book_account_count, 72);
 }
 
 #[test]
@@ -100,9 +114,15 @@ fn english_setup_creates_english_account_names() {
             row.get(0)
         })
         .expect("減価償却費名を取得");
+    let loans_receivable: String = connection
+        .query_row("SELECT name FROM accounts WHERE code = '1250'", [], |row| {
+            row.get(0)
+        })
+        .expect("貸付金名を取得");
 
     assert_eq!(inventory, "Inventory");
     assert_eq!(depreciation, "Depreciation expense");
+    assert_eq!(loans_receivable, "Loans receivable");
 }
 
 #[test]
