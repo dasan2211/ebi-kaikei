@@ -6,6 +6,7 @@ fn line(account_id: &str, side: Side, amount_minor: i64) -> JournalLine {
         side,
         amount_minor,
         memo: None,
+        tax_code_id: None,
     }
 }
 

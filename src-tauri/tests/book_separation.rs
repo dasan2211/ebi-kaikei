@@ -18,12 +18,14 @@ fn balanced_entry(description: &str) -> DraftJournalEntry {
                 side: Side::Debit,
                 amount_minor: 1_000,
                 memo: None,
+                tax_code_id: None,
             },
             JournalLine {
                 account_id: "account-sales".to_owned(),
                 side: Side::Credit,
                 amount_minor: 1_000,
                 memo: None,
+                tax_code_id: None,
             },
         ],
     }
