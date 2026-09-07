@@ -1,4 +1,7 @@
-use ebi_kaikei_lib::{application::initial_setup, database::open_database};
+use ebi_kaikei_lib::{
+    application::initial_setup,
+    database::{open_database, LATEST_SCHEMA_VERSION},
+};
 use rusqlite::Connection;
 
 #[test]
@@ -18,9 +21,34 @@ fn migration_creates_strict_accounting_tables_without_choosing_a_language() {
         .query_row("SELECT COUNT(*) FROM books", [], |row| row.get(0))
         .expect("帳簿数を取得");
 
+    let schema_version: i64 = connection
+        .query_row("PRAGMA user_version", [], |row| row.get(0))
+        .expect("read schema version");
+    let tax_code_count: i64 = connection
+        .query_row("SELECT COUNT(*) FROM tax_codes", [], |row| row.get(0))
+        .expect("read seeded tax codes");
+    let taxable_book_count: i64 = connection
+        .query_row(
+            "SELECT COUNT(*) FROM books WHERE consumption_tax_status = 'taxable'",
+            [],
+            |row| row.get(0),
+        )
+        .expect("read default consumption tax statuses");
+    let book_id_is_required: i64 = connection
+        .query_row(
+            "SELECT \"notnull\" FROM pragma_table_info('journal_entries') WHERE name = 'book_id'",
+            [],
+            |row| row.get(0),
+        )
+        .expect("read journal entry book constraint");
+
     assert_eq!(foreign_keys, 1);
     assert_eq!(account_count, 0);
     assert_eq!(book_count, 2);
+    assert_eq!(schema_version, LATEST_SCHEMA_VERSION);
+    assert_eq!(tax_code_count, 7);
+    assert_eq!(taxable_book_count, 2);
+    assert_eq!(book_id_is_required, 1);
     assert!(!setup_status.completed);
     assert_eq!(setup_status.default_account_count, 34);
 }
@@ -118,51 +146,22 @@ fn database_rejects_invalid_journal_line_amount() {
 }
 
 #[test]
-fn version_two_data_is_backfilled_into_the_business_income_book() {
+fn unsupported_legacy_schema_version_is_rejected() {
     let directory = tempfile::tempdir().expect("一時ディレクトリを作成");
     let path = directory.path().join("legacy.sqlite");
     {
         let connection = Connection::open(&path).expect("旧DBを作成");
         connection
-            .execute_batch(include_str!("../src/database/migrations/0001_init.sql"))
-            .expect("初期スキーマを作成");
-        connection
-            .execute_batch(include_str!(
-                "../src/database/migrations/0002_initial_setup.sql"
-            ))
-            .expect("セットアップスキーマを作成");
-        connection
-            .execute(
-                "INSERT INTO accounts (id, code, name, account_type, normal_side, created_at, updated_at)
-                 VALUES ('legacy-cash', '1000', '現金', 'asset', 'debit', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
-                [],
-            )
-            .expect("旧勘定科目を作成");
-        connection
-            .execute(
-                "INSERT INTO journal_entries (id, transaction_date, description, status, source_type, created_at, updated_at)
-                 VALUES ('legacy-entry', '2026-07-01', '移行前仕訳', 'draft', 'manual', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)",
-                [],
-            )
-            .expect("旧仕訳を作成");
+            .execute_batch("PRAGMA user_version = 13;")
+            .expect("旧スキーマバージョンを設定");
     }
 
-    let connection = open_database(&path).expect("最新スキーマへ移行");
-    let migrated_book_id: String = connection
-        .query_row(
-            "SELECT book_id FROM journal_entries WHERE id = 'legacy-entry'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("移行後の帳簿IDを取得");
-    let association_count: i64 = connection
-        .query_row(
-            "SELECT COUNT(*) FROM book_accounts WHERE account_id = 'legacy-cash'",
-            [],
-            |row| row.get(0),
-        )
-        .expect("帳簿別科目関連を取得");
+    let error = match open_database(&path) {
+        Ok(_) => panic!("旧スキーマが受け入れられました"),
+        Err(error) => error,
+    };
+    let message = error.to_string();
 
-    assert_eq!(migrated_book_id, "book-business-income");
-    assert_eq!(association_count, 2);
+    assert!(message.contains("version 13"));
+    assert!(message.contains("再作成"));
 }

@@ -1,11 +1,9 @@
-use crate::error::AppResult;
+use crate::error::{AppError, AppResult};
 use rusqlite::Connection;
 use std::{path::Path, sync::Mutex};
 
-const INITIAL_MIGRATION: &str = include_str!("migrations/0001_init.sql");
-const INITIAL_SETUP_MIGRATION: &str = include_str!("migrations/0002_initial_setup.sql");
-const BOOKS_SCHEMA_MIGRATION: &str = include_str!("migrations/0003_books_schema.sql");
-const BOOKS_BACKFILL_MIGRATION: &str = include_str!("migrations/0004_books_backfill.sql");
+const BASELINE_MIGRATION: &str = include_str!("migrations/0001_init.sql");
+pub const LATEST_SCHEMA_VERSION: i64 = 14;
 
 pub struct Database {
     pub connection: Mutex<Connection>,
@@ -25,17 +23,14 @@ pub fn open_database(path: &Path) -> AppResult<Connection> {
         "PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL; PRAGMA busy_timeout = 5000;",
     )?;
     let version: i64 = connection.query_row("PRAGMA user_version", [], |row| row.get(0))?;
-    if version < 1 {
-        apply_migration(&mut connection, INITIAL_MIGRATION)?;
-    }
-    if version < 2 {
-        apply_migration(&mut connection, INITIAL_SETUP_MIGRATION)?;
-    }
-    if version < 3 {
-        apply_migration(&mut connection, BOOKS_SCHEMA_MIGRATION)?;
-    }
-    if version < 4 {
-        apply_migration(&mut connection, BOOKS_BACKFILL_MIGRATION)?;
+    match version {
+        0 => apply_migration(&mut connection, BASELINE_MIGRATION)?,
+        LATEST_SCHEMA_VERSION => {}
+        version => {
+            return Err(AppError::Validation(format!(
+                "未対応のデータベーススキーマです（version {version}）。開発用DBを削除して再作成してください"
+            )));
+        }
     }
     Ok(connection)
 }
