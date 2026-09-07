@@ -1,4 +1,9 @@
 pub mod attachments;
+pub mod automatic_backup;
 pub mod backup;
 pub mod csv_export;
+pub mod csv_import;
 pub mod initial_setup;
+pub mod journal_cleanup;
+pub mod performance_data;
+pub mod storage;

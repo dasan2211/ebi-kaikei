@@ -14,9 +14,10 @@ pub fn run() {
         .setup(|app| {
             let app_data_dir = app.path().app_data_dir()?;
             std::fs::create_dir_all(&app_data_dir)?;
-            let connection = open_database(&app_data_dir.join("accounting.sqlite"))
+            let database_path = app_data_dir.join("accounting.sqlite");
+            let connection = open_database(&database_path)
                 .map_err(|error| Box::<dyn std::error::Error>::from(error.to_string()))?;
-            app.manage(Database::new(connection));
+            app.manage(Database::new(connection, database_path));
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

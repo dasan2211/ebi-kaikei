@@ -1,18 +1,23 @@
 use crate::error::{AppError, AppResult};
 use rusqlite::Connection;
-use std::{path::Path, sync::Mutex};
+use std::{
+    path::{Path, PathBuf},
+    sync::Mutex,
+};
 
 const BASELINE_MIGRATION: &str = include_str!("migrations/0001_init.sql");
 pub const LATEST_SCHEMA_VERSION: i64 = 14;
 
 pub struct Database {
     pub connection: Mutex<Connection>,
+    pub path: PathBuf,
 }
 
 impl Database {
-    pub fn new(connection: Connection) -> Self {
+    pub fn new(connection: Connection, path: PathBuf) -> Self {
         Self {
             connection: Mutex::new(connection),
+            path,
         }
     }
 }
